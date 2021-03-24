@@ -1,6 +1,5 @@
 import { createContext, ReactNode, useContext, useState } from "react";
 import { toast } from "react-toastify";
-import { reduceEachTrailingCommentRange } from "typescript";
 import { api } from "../services/api";
 import { Product, Stock } from "../types";
 
@@ -43,7 +42,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
         const { data: product } = await api.get<Product>(
           `products/${productId}`
         );
-        const { data: stock } = await api.get<Stock>(`sock/${productId}`);
+        const { data: stock } = await api.get<Stock>(`stock/${productId}`);
 
         if (stock.amount > 0) {
           setCart([...cart, { ...product, amount: 1 }]);
@@ -60,7 +59,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
         const { data: stock } = await api.get(`stock/${productId}`);
 
         if (stock.amount > productAlreadyInCart.amount) {
-          const updateCart = cart.map((cartItem) =>
+          const updatedCart = cart.map((cartItem) =>
             cartItem.id === productId
               ? {
                   ...cartItem,
@@ -69,11 +68,14 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
               : cartItem
           );
 
-          setCart(updateCart);
-          localStorage.setItem("@RocketShoes:cart", JSON.stringify(updateCart));
+          setCart(updatedCart);
+          localStorage.setItem(
+            "@RocketShoes:cart",
+            JSON.stringify(updatedCart)
+          );
           return;
         } else {
-          toast.error("Quantidade solicidata fora do estoque");
+          toast.error("Quantidade solicitada fora de estoque");
         }
       }
     } catch {
