@@ -20,10 +20,11 @@ interface Product {
 const Cart = (): JSX.Element => {
   const { cart, removeProduct, updateProductAmount } = useCart();
 
+  // for every cart in localStorage, format the prices.
   const cartFormatted = cart.map((product) => ({
     ...product,
     priceFormatted: formatPrice(product.price),
-    subtotal: formatPrice(product.price * product.amount),
+    subTotal: formatPrice(product.price * product.amount),
   }));
 
   const total = formatPrice(
@@ -102,7 +103,7 @@ const Cart = (): JSX.Element => {
                 </div>
               </td>
               <td>
-                <strong>{product.subtotal}</strong>
+                <strong>{product.subTotal}</strong>
               </td>
               <td>
                 <button
